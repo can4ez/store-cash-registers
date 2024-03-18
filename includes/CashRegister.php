@@ -2,10 +2,17 @@
 
 namespace Shop;
 
+enum CashRegisterState
+{
+    case CLOSE;
+    case OPEN;
+}
+
 class CashRegister
 {
     private int $id;
     private array $queue = [];
+    private CashRegisterState $state = CashRegisterState::CLOSE;
 
     public function __construct($id)
     {
