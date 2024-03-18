@@ -19,4 +19,14 @@ class Customer
     {
         $this->products[] = $product;
     }
+
+    public function findMostEmptyRegister()
+    {
+        return Shop::getInstance()->getMostEmptyRegister();
+    }
+
+    public function process($time)
+    {
+
+    }
 }
