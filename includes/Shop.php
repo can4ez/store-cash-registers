@@ -70,14 +70,11 @@ class Shop implements IProcess
         return false;
     }
 
-    public function getCountOpenedRegister()
+    public function getOpenedRegister()
     {
-        $count = 0;
-        foreach ($this->registers as $register) {
-            if ($register->getState() === CashRegisterState::OPEN) $count++;
-        }
-
-        return $count;
+        return array_filter($this->registers, function ($register, $key) {
+            return $register->getState() === CashRegisterState::OPEN;
+        }, ARRAY_FILTER_USE_BOTH);;
     }
 
     public function tryOpenRegister(&$register): bool
@@ -119,7 +116,7 @@ class Shop implements IProcess
 
         $this->customers[] = $customer;
 
-        echo "" . $customer->getName() . " пришел в магазин<br>";
+//        echo "" . $customer->getName() . " пришел в магазин<br>";
 
         return count($this->customers) - 1;
     }
@@ -174,10 +171,18 @@ class Shop implements IProcess
 
     public function showStatus($time)
     {
+        $openRegisters = $this->getOpenedRegister();
+
         echo "- status - <br>";
-        echo "Количество посетителей: " . count($this->customers) . "<br>";
-        echo "Количество открытых касс: " . $this->getCountOpenedRegister() . "<br>";
         echo "Время: " . Utils::formatHours($time) . "<br>";
+        echo "Количество посетителей: " . count($this->customers) . "<br>";
+        echo "Количество открытых касс: " . count($openRegisters) . "<br>";
+
+        foreach ($openRegisters as $register) {
+            echo "&nbsp; Касса #" . $register->getId() . " открыта, размер очереди: " . $register->getQueueCount() . " ";
+            echo "(Время с посл. кл-а " . ($time - $register->getLastQueuePulled()) . " мин.)<br>";
+        }
+
         echo "- status - <br>";
     }
 }

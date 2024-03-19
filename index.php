@@ -18,14 +18,7 @@ $customers = 1; // Количество новых посетителей
 $customerIndex = 0;
 
 for ($time = 60 * 8; ; $time += $tickStep) {
-
-    if ($time >= $maxWorkTime) break;
-
-    if ($time % 60 === 0) {
-        echo "Магазин работает, время: " . \Shop\Utils::formatHours($time) . " ч. <br>";
-    }
-
-    echo "<br>--- start loop ---<br>";
+//    echo "<br>--- start loop ---<br>";
 
     for ($k = 0; $k < $customers; $k++) {
         $newCustomer = new \Shop\Customer('Покупатель #' . ++$customerIndex);
@@ -34,20 +27,25 @@ for ($time = 60 * 8; ; $time += $tickStep) {
 
     $shop->process($time, $tickStep);
 
-    $shop->showStatus($time);
-
-    echo "--- end loop ---<br>";
+//    echo "--- end loop ---<br>";
 
     $hour = round($time / 60);
     if ($hour > 8 && $hour < 12) {
         $customers = rand(0, 3); // Постепенный нарастающий поток покупателей до пика
     } else if ($hour >= 12 && $hour <= 19) {
-        $customers = rand(3, 5); // Постепенный нарастающий поток покупателей до пика
+        $customers = rand(-10, 5); // Постепенный нарастающий поток покупателей до пика
     } else if ($hour > 20) {
-        $customers = rand(0, 2); // Спад числа покупателей до 0 к концу дня
+        $customers = rand(-4, 2); // Спад числа покупателей до 0 к концу дня
     }
     // Ограничиваем количество покупателей в пик
     $customers = max(min($customers, $maxCustomers), 0);
+
+    if ($time >= $maxWorkTime) break;
+
+    if ($time % 60 === 0) {
+        $shop->showStatus($time);
+    }
+
 }
 
 echo "<hr>";

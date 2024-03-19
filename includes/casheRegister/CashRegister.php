@@ -30,7 +30,6 @@ class CashRegister implements IProcess
         if (in_array($customer, $this->queue)) return false;
 
         $this->queue[] = $customer;
-        $this->lastQueuePulled = $time;
 
         return count($this->queue) - 1;
     }
@@ -53,14 +52,14 @@ class CashRegister implements IProcess
     public function open(): bool
     {
         $this->state = CashRegisterState::OPEN;
-        echo "" . $this->cashier->getName() . " открыл свою кассу<br>";
+//        echo "" . $this->cashier->getName() . " открыл свою кассу<br>";
         return true;
     }
 
     public function close(): bool
     {
         $this->state = CashRegisterState::CLOSE;
-        echo "" . $this->cashier->getName() . " закрыл свою кассу<br>";
+//        echo "" . $this->cashier->getName() . " закрыл свою кассу<br>";
         return true;
     }
 
@@ -88,6 +87,8 @@ class CashRegister implements IProcess
             return true;
         }
 
+        $this->lastQueuePulled = $time;
+
         $customer = $this->cashier->getCurrentCustomer();
         if ($customer == null) {
             $customer = $this->getFirstFromQueue();
@@ -107,5 +108,13 @@ class CashRegister implements IProcess
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastQueuePulled(): int
+    {
+        return $this->lastQueuePulled;
     }
 }

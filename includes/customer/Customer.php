@@ -34,7 +34,6 @@ class Customer implements IProcess
 
     public function addProduct(Product $product): void
     {
-//        echo "[CUSTOMER:" . $this->name . "] Take product: " . $product->toString() . "<br>";
         $this->products[] = $product;
     }
 
@@ -75,24 +74,24 @@ class Customer implements IProcess
             $tickStep -= $timeLeft;
             $this->elapsedTime = $this->getTimeToPay();
 
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-                . Utils::formatHours($time)
-                . " | "
-                . $this->name
-                . " Оплатил покупки ["
-                . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
-                . "%] <br>";
+//            echo "&nbsp;&nbsp;&nbsp;&nbsp;"
+//                . Utils::formatHours($time)
+//                . " | "
+//                . $this->name
+//                . " Оплатил покупки ["
+//                . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+//                . "%] <br>";
 
             return true;
         }
 
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-            . Utils::formatHours($time)
-            . " | "
-            . $this->name
-            . " Оплачивает покупки ["
-            . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
-            . "%] <br>";
+//        echo "&nbsp;&nbsp;&nbsp;&nbsp;"
+//            . Utils::formatHours($time)
+//            . " | "
+//            . $this->name
+//            . " Оплачивает покупки ["
+//            . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+//            . "%] <br>";
 
         // Тратим время на частичную обработку этого товара
         $this->elapsedTime += $tickStep;
@@ -120,7 +119,7 @@ class Customer implements IProcess
                 $productsCount--;
             }
 
-            echo "&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов) <br>";
+//            echo "&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов) <br>";
 
             // Шагаем к первой самой свободной кассе
             $cashRegister = $this->findMostEmptyRegister();
