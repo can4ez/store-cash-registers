@@ -35,9 +35,9 @@ class CashRegister implements IProcess
         return count($this->queue) - 1;
     }
 
-    public function getFirstFromQueue(): false|Customer
+    public function getFirstFromQueue(): ?Customer
     {
-        if (count($this->queue) === 0) return false;
+        if (count($this->queue) === 0) return null;
         return $this->queue[array_key_first($this->queue)];
     }
 
@@ -53,12 +53,14 @@ class CashRegister implements IProcess
     public function open(): bool
     {
         $this->state = CashRegisterState::OPEN;
+        echo "" . $this->cashier->getName() . " открыл свою кассу<br>";
         return true;
     }
 
     public function close(): bool
     {
         $this->state = CashRegisterState::CLOSE;
+        echo "" . $this->cashier->getName() . " закрыл свою кассу<br>";
         return true;
     }
 
@@ -75,20 +77,25 @@ class CashRegister implements IProcess
         return $this->state;
     }
 
-    public function process($time): bool
+    public function process($time, $tickStep): bool
     {
-        $customer = $this->getFirstFromQueue();
-        if ($customer !== false) {
-            if ($this->cashier->process($time, $customer) === false) {
-                return false;
+        if ($this->getState() !== CashRegisterState::OPEN) return false;
+
+        if ($this->getQueueCount() === 0) {
+            if (($time - $this->lastQueuePulled) >= self::maxEmptyMinutes) {
+                $this->close();
             }
-            $this->removeFromQueue($customer);
-            // TODO: Мб как-то иначе сделать?
-            Shop::getInstance()->removeCustomer($customer);
+            return true;
         }
 
-        if (($time - $this->lastQueuePulled) >= self::maxEmptyMinutes) {
-            $this->close();
+        $customer = $this->cashier->getCurrentCustomer();
+        if ($customer == null) {
+            $customer = $this->getFirstFromQueue();
+        }
+
+        if ($this->cashier->process($time, $tickStep, $customer)) {
+            $this->removeFromQueue($customer);
+            Shop::getInstance()->removeCustomer($customer);
         }
 
         return true;

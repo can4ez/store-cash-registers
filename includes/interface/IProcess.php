@@ -4,5 +4,5 @@ namespace Shop;
 
 interface IProcess
 {
-    public function process($time): bool;
+    public function process($time, $tickStep): bool;
 }

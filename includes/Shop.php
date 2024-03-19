@@ -2,6 +2,8 @@
 
 namespace Shop;
 
+include __DIR__ . '/utils/Time.php';
+
 include __DIR__ . '/interface/IProcess.php';
 include __DIR__ . '/interface/IProcessData.php';
 
@@ -18,20 +20,23 @@ class Shop implements IProcess
 
     private static ?Shop $instance = null;
 
+    /**
+     * @var string Название магазина
+     */
     private string $name;
 
     /**
-     * @var CashRegister[]
+     * @var CashRegister[] Список доступных касс
      */
     private array $registers = [];
 
     /**
-     * @var Customer[]
+     * @var Customer[] Список посетителей в магазине
      */
     private array $customers = [];
 
     /**
-     * @var Products[]
+     * @var Products[] Список продуктов в магазине
      */
     private array $products = [];
 
@@ -46,10 +51,10 @@ class Shop implements IProcess
 
         $this->name = $name;
 
-        for ($i = 0; $i < self::registersCount; $i++) {
+        for ($i = 1; $i <= self::registersCount; $i++) {
             // Упроситм, что 1 касса = 1 продавец,
             // на деле же продавец может открыть и другую кассу
-            $cashier = new Cashier("Cashier_${i}");
+            $cashier = new Cashier("Кассир #${i}");
             $register = new CashRegister($i, $cashier);
             $this->registers[] = $register;
             $cashier->setRegister($register);
@@ -63,6 +68,16 @@ class Shop implements IProcess
         }
 
         return false;
+    }
+
+    public function getCountOpenedRegister()
+    {
+        $count = 0;
+        foreach ($this->registers as $register) {
+            if ($register->getState() === CashRegisterState::OPEN) $count++;
+        }
+
+        return $count;
     }
 
     public function tryOpenRegister(&$register): bool
@@ -104,6 +119,8 @@ class Shop implements IProcess
 
         $this->customers[] = $customer;
 
+        echo "" . $customer->getName() . " пришел в магазин<br>";
+
         return count($this->customers) - 1;
     }
 
@@ -142,16 +159,28 @@ class Shop implements IProcess
         return self::$instance;
     }
 
-    public function process($time): bool
+    public function process($time, $tickStep): bool
     {
         foreach ($this->customers as $customer) {
-            $customer->process($time);
+            $customer->process($time, $tickStep);
         }
 
         foreach ($this->registers as $register) {
-            $register->process($time);
+            $register->process($time, $tickStep);
         }
 
         return true;
+    }
+
+    public function showStatus()
+    {
+        echo "- status -";
+        echo "<br>";
+        echo "Количество посетителей: " . count($this->customers);
+        echo "<br>";
+        echo "Количество открытых касс: " . $this->getCountOpenedRegister();
+        echo "<br>";
+        echo "- status -";
+        echo "<br>";
     }
 }

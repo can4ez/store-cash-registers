@@ -27,13 +27,17 @@ class Customer implements IProcess
 
     public function addProduct(Product $product): void
     {
-        echo "[CUSTOMER:" . $this->name . "] Take product: " . $product->toString() . "<br>";
+//        echo "[CUSTOMER:" . $this->name . "] Take product: " . $product->toString() . "<br>";
         $this->products[] = $product;
     }
 
-    /**
-     * @return Product
-     */
+
+    public function getFirstProduct(): false|Product
+    {
+        if (count($this->products) === 0) return false;
+        return $this->products[array_key_first($this->products)];
+    }
+
     public function shiftProduct()
     {
         return array_shift($this->products);
@@ -49,7 +53,7 @@ class Customer implements IProcess
         return Shop::getInstance()->getMostEmptyRegister();
     }
 
-    public function process($time): bool
+    public function process($time, $tickStep): bool
     {
         if ($this->cashRegister === null) {
 
@@ -64,11 +68,15 @@ class Customer implements IProcess
                 $productsCount--;
             }
 
+            echo "&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов) <br>";
+
+            // Шагаем к первой самой свободной кассе
             $cashRegister = $this->findMostEmptyRegister();
             $cashRegister->addToQueue($this, $time);
             $this->cashRegister = $cashRegister;
 
-            echo "[CUSTOMER:" . $this->name . "] Move to cash register: " . $cashRegister->getId() . " (" . $cashRegister->getQueueCount() . ")<br>";
+//            echo "[CUSTOMER:" . $this->name . "] Move to cash register: " . $cashRegister->getId() . " (" . $cashRegister->getQueueCount() . ")<br>";
+
         }
 
         return true;
