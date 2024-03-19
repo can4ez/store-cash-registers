@@ -75,7 +75,9 @@ class Cashier implements IProcessData
         }
 
         if ($finish = ($this->currentCustomer->getProductsCount() === 0)) {
-            $this->currentCustomer = null;
+            if ($finish = $this->currentCustomer->pay($time, $timeLeft)) {
+                $this->currentCustomer = null;
+            }
         }
 
         return $finish;

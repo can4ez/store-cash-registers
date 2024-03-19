@@ -174,13 +174,9 @@ class Shop implements IProcess
 
     public function showStatus()
     {
-        echo "- status -";
-        echo "<br>";
-        echo "Количество посетителей: " . count($this->customers);
-        echo "<br>";
-        echo "Количество открытых касс: " . $this->getCountOpenedRegister();
-        echo "<br>";
-        echo "- status -";
-        echo "<br>";
+        echo "- status - <br>";
+        echo "Количество посетителей: " . count($this->customers) . "<br>";
+        echo "Количество открытых касс: " . $this->getCountOpenedRegister() . "<br>";
+        echo "- status - <br>";
     }
 }

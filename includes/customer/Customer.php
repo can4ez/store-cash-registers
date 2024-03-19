@@ -7,6 +7,13 @@ namespace Shop;
  */
 class Customer implements IProcess
 {
+    /**
+     * Сколько минут покупатель оплачивает твоары
+     */
+    const timeToPay = 1;
+
+    protected float $elapsedTime = 0;
+
     private string $name;
 
     /**
@@ -53,10 +60,55 @@ class Customer implements IProcess
         return Shop::getInstance()->getMostEmptyRegister();
     }
 
+    public function getTimeToPay(): float
+    {
+        return self::timeToPay;
+    }
+
+    public function pay($time, &$tickStep): bool
+    {
+        // Сколько осталось для заверщения обработки товара
+        $timeLeft = $this->getTimeToPay() - $this->elapsedTime;
+
+        if (($tickStep - $timeLeft) >= 0) {
+            // У нас есть время чтобы полностью обработать этот товар
+            $tickStep -= $timeLeft;
+            $this->elapsedTime = $this->getTimeToPay();
+
+            echo "&nbsp;&nbsp;&nbsp;&nbsp;"
+                . Time::format($time)
+                . " | "
+                . $this->name
+                . " Оплатил покупки ["
+                . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+                . "%] <br>";
+
+            return true;
+        }
+
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;"
+            . Time::format($time)
+            . " | "
+            . $this->name
+            . " Оплачивает покупки ["
+            . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+            . "%] <br>";
+
+        // Тратим время на частичную обработку этого товара
+        $this->elapsedTime += $tickStep;
+        $tickStep = 0;
+        return false;
+    }
+
     public function process($time, $tickStep): bool
     {
+        // TODO: Можно добавить состояния посетителя...
+        //  1. Выбирает товар
+        //  2. Ищет кассу
+        //  3. Стоит в очереди
+        //  4. Пробивает товары
+        //  5. Оплачивает товары
         if ($this->cashRegister === null) {
-
             // Наполняем продуктовую корзину
             $productsCount = random_int(1, 3);
             while ($productsCount > 0) {
@@ -74,9 +126,6 @@ class Customer implements IProcess
             $cashRegister = $this->findMostEmptyRegister();
             $cashRegister->addToQueue($this, $time);
             $this->cashRegister = $cashRegister;
-
-//            echo "[CUSTOMER:" . $this->name . "] Move to cash register: " . $cashRegister->getId() . " (" . $cashRegister->getQueueCount() . ")<br>";
-
         }
 
         return true;
