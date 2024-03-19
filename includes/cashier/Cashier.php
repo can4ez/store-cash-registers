@@ -27,16 +27,20 @@ class Cashier implements IProcessData
      */
     public function process($time, $data): bool
     {
+        // Логика обработки покупателя
 //        if(($data instanceof Customer) === false) {
 //            // throw new \Exception();
 //            return false;
 //        }
 
+        echo "[CASHIER:" . $this->name . "] Start process customer " . $data->getName() . " (products: " . $data->getProductsCount() . ")<br>";
+
         while ($product = $data->shiftProduct()) {
-            echo "Product price: " . $product->getPrice() . " <br>";
+            echo "[CASHIER:" . $this->name . "] Process product: " . $product->toString() . " <br>";
         }
 
-        // Логика обработки покупателя
+        echo "[CASHIER:" . $this->name . "] Finish process customer " . $data->getName() . " (products: " . $data->getProductsCount() . ")<br>";
+
         return true;
     }
 }

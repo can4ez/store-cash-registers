@@ -83,6 +83,8 @@ class CashRegister implements IProcess
                 return false;
             }
             $this->removeFromQueue($customer);
+            // TODO: Мб как-то иначе сделать?
+            Shop::getInstance()->removeCustomer($customer);
         }
 
         if (($time - $this->lastQueuePulled) >= self::maxEmptyMinutes) {

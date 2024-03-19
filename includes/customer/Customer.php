@@ -8,6 +8,15 @@ namespace Shop;
 class Customer implements IProcess
 {
     private string $name;
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     private array $products = [];
     private ?CashRegister $cashRegister = null;
 
@@ -18,6 +27,7 @@ class Customer implements IProcess
 
     public function addProduct(Product $product): void
     {
+        echo "[CUSTOMER:" . $this->name . "] Take product: " . $product->toString() . "<br>";
         $this->products[] = $product;
     }
 
@@ -29,6 +39,11 @@ class Customer implements IProcess
         return array_shift($this->products);
     }
 
+    public function getProductsCount()
+    {
+        return count($this->products);
+    }
+
     public function findMostEmptyRegister()
     {
         return Shop::getInstance()->getMostEmptyRegister();
@@ -37,6 +52,18 @@ class Customer implements IProcess
     public function process($time): bool
     {
         if ($this->cashRegister === null) {
+
+            // Наполняем продуктовую корзину
+            $productsCount = random_int(1, 3);
+            while ($productsCount > 0) {
+                $product = Shop::getInstance()->getRandomProduct();
+                if ($product === false) {
+                    throw new \Exception("В магазине нет товаров!");
+                }
+                $this->addProduct($product);
+                $productsCount--;
+            }
+
             $cashRegister = $this->findMostEmptyRegister();
             $cashRegister->addToQueue($this, $time);
             $this->cashRegister = $cashRegister;

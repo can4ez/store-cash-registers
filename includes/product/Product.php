@@ -19,4 +19,9 @@ abstract class Product
      * @return float
      */
     public abstract function getPrice(): float;
+
+    public function toString()
+    {
+        return "{$this->name} - {$this->getPrice()} руб.";
+    }
 }

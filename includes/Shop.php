@@ -31,6 +31,11 @@ class Shop implements IProcess
     private array $customers = [];
 
     /**
+     * @var Products[]
+     */
+    private array $products = [];
+
+    /**
      * @param string $name - Название магазина
      */
     public function __construct(string $name)
@@ -93,7 +98,7 @@ class Shop implements IProcess
         return $result;
     }
 
-    public function addCustomer($customer)
+    public function addCustomer($customer): bool|int
     {
         if (in_array($customer, $this->customers)) return false;
 
@@ -102,13 +107,34 @@ class Shop implements IProcess
         return count($this->customers) - 1;
     }
 
-    public function removeCustomer($customer)
+    public function removeCustomer($customer): bool
     {
-        $this->customers = array_filter($this->customers, function ($key, $item) use ($customer) {
+        $this->customers = array_filter($this->customers, function ($item, $key) use ($customer) {
             return $item !== $customer;
         }, ARRAY_FILTER_USE_BOTH);
 
         return true;
+    }
+
+    public function addProduct($product): bool
+    {
+        if (in_array($product, $this->products)) return false;
+
+        $this->products[] = $product;
+
+        return true;
+    }
+
+    public function getRandomProduct(): false|Product
+    {
+        if (empty($this->products)) return false;
+
+        return $this->products[array_rand($this->products)];
+    }
+
+    public function getCustomersCount(): int
+    {
+        return count($this->customers);
     }
 
     public static function getInstance(): ?Shop
