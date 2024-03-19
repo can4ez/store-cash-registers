@@ -11,6 +11,6 @@ class WeightProduct extends Product
 
     public function getTimeToProcess(): float
     {
-        return self::timeProcess * 10;
+        return self::timeProcess * 1.2;
     }
 }

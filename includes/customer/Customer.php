@@ -76,7 +76,7 @@ class Customer implements IProcess
             $this->elapsedTime = $this->getTimeToPay();
 
             echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-                . Time::format($time)
+                . Utils::formatHours($time)
                 . " | "
                 . $this->name
                 . " Оплатил покупки ["
@@ -87,7 +87,7 @@ class Customer implements IProcess
         }
 
         echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-            . Time::format($time)
+            . Utils::formatHours($time)
             . " | "
             . $this->name
             . " Оплачивает покупки ["

@@ -2,7 +2,7 @@
 
 namespace Shop;
 
-include __DIR__ . '/utils/Time.php';
+include __DIR__ . '/utils/Utils.php';
 
 include __DIR__ . '/interface/IProcess.php';
 include __DIR__ . '/interface/IProcessData.php';
@@ -15,7 +15,7 @@ include __DIR__ . '/customer/Customer.php';
 
 class Shop implements IProcess
 {
-    public const registersCount = 3;
+    public const maxRegistersCount = 3;
     public const maxCustomersOnRegister = 5;
 
     private static ?Shop $instance = null;
@@ -51,7 +51,7 @@ class Shop implements IProcess
 
         $this->name = $name;
 
-        for ($i = 1; $i <= self::registersCount; $i++) {
+        for ($i = 1; $i <= self::maxRegistersCount; $i++) {
             // Упроситм, что 1 касса = 1 продавец,
             // на деле же продавец может открыть и другую кассу
             $cashier = new Cashier("Кассир #${i}");
@@ -172,11 +172,12 @@ class Shop implements IProcess
         return true;
     }
 
-    public function showStatus()
+    public function showStatus($time)
     {
         echo "- status - <br>";
         echo "Количество посетителей: " . count($this->customers) . "<br>";
         echo "Количество открытых касс: " . $this->getCountOpenedRegister() . "<br>";
+        echo "Время: " . Utils::formatHours($time) . "<br>";
         echo "- status - <br>";
     }
 }

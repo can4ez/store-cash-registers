@@ -2,9 +2,9 @@
 
 namespace Shop;
 
-class Time
+class Utils
 {
-    static public function format($time, $format = '%02d:%02d'): string
+    static public function formatHours($time, $format = '%02d:%02d'): string
     {
         if ($time < 1) {
             return '00:00';

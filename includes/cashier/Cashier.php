@@ -30,7 +30,7 @@ class Cashier implements IProcessData
         }
 
         if ($this->currentProduct->process($timeLeft) === true) {
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Time::format($time) . " | "
+            echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
                 . $this->name . " > "
                 . $this->currentCustomer->getName()
                 . " (" . $this->currentCustomer->getProductsCount() - 1 . ") |"
@@ -39,7 +39,7 @@ class Cashier implements IProcessData
             return true;
         }
 
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Time::format($time) . " | "
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
             . $this->name . " > "
             . $this->currentCustomer->getName()
             . " (" . $this->currentCustomer->getProductsCount() . ") |"
