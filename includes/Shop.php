@@ -1,11 +1,14 @@
 <?php
 
 namespace Shop;
-include __DIR__ . '/Cashier.php';
-include __DIR__ . '/CashRegister.php';
+
+include __DIR__ . '/interface/IProcess.php';
+include __DIR__ . '/interface/IProcessData.php';
+
+include __DIR__ . '/cashier/Cashier.php';
+include __DIR__ . '/casheRegister/CashRegister.php';
 include __DIR__ . '/product/Product.php';
 include __DIR__ . '/customer/Customer.php';
-include __DIR__ . '/interface/IProcess.php';
 
 
 class Shop implements IProcess
@@ -34,12 +37,14 @@ class Shop implements IProcess
     {
         if (self::$instance !== null) return self::$instance;
 
+        self::$instance = $this;
+
         $this->name = $name;
 
         for ($i = 0; $i < self::registersCount; $i++) {
             // Упроситм, что 1 касса = 1 продавец,
             // на деле же продавец может открыть и другую кассу
-            $cashier = new Cashier(`Cashier_${i}`);
+            $cashier = new Cashier("Cashier_${i}");
             $register = new CashRegister($i, $cashier);
             $this->registers[] = $register;
             $cashier->setRegister($register);
@@ -55,7 +60,7 @@ class Shop implements IProcess
         return false;
     }
 
-    public function tryOpenRegister(&$register): false|CashRegister
+    public function tryOpenRegister(&$register): bool
     {
         $register = $this->findClosedRegister();
         if ($register === false) {
@@ -79,7 +84,7 @@ class Shop implements IProcess
             }
         }
 
-        if ($result->getQueueCount() > self::maxCustomersOnRegister) {
+        if ($result === null || $result->getQueueCount() > self::maxCustomersOnRegister) {
             if ($this->tryOpenRegister($register) !== false) {
                 return $register;
             }
@@ -111,10 +116,16 @@ class Shop implements IProcess
         return self::$instance;
     }
 
-    public function process($time)
+    public function process($time): bool
     {
+        foreach ($this->customers as $customer) {
+            $customer->process($time);
+        }
+
         foreach ($this->registers as $register) {
             $register->process($time);
         }
+
+        return true;
     }
 }
