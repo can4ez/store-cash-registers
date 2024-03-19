@@ -52,14 +52,14 @@ class CashRegister implements IProcess
     public function open(): bool
     {
         $this->state = CashRegisterState::OPEN;
-//        echo "" . $this->cashier->getName() . " открыл свою кассу<br>";
+        \Shop\Utils::debug($this->cashier->getName() . " открыл свою кассу");
         return true;
     }
 
     public function close(): bool
     {
         $this->state = CashRegisterState::CLOSE;
-//        echo "" . $this->cashier->getName() . " закрыл свою кассу<br>";
+        \Shop\Utils::debug($this->cashier->getName() . " закрыл свою кассу");
         return true;
     }
 

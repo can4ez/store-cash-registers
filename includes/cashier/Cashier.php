@@ -30,20 +30,20 @@ class Cashier implements IProcessData
         }
 
         if ($this->currentProduct->process($timeLeft) === true) {
-//            echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
-//                . $this->name . " > "
-//                . $this->currentCustomer->getName()
-//                . " (" . $this->currentCustomer->getProductsCount() - 1 . ") |"
-//                . " Кассир пробил товар: " . $this->currentProduct->toString() . "<br>";
+            \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
+                . $this->name . " > "
+                . $this->currentCustomer->getName()
+                . " (" . $this->currentCustomer->getProductsCount() - 1 . ") |"
+                . " Кассир пробил товар: " . $this->currentProduct->toString());
             $this->currentProduct = null;
             return true;
         }
 
-//        echo "&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
-//            . $this->name . " > "
-//            . $this->currentCustomer->getName()
-//            . " (" . $this->currentCustomer->getProductsCount() . ") |"
-//            . " Кассир пробивает товар: " . $this->currentProduct->toString() . "<br>";
+        \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
+            . $this->name . " > "
+            . $this->currentCustomer->getName()
+            . " (" . $this->currentCustomer->getProductsCount() . ") |"
+            . " Кассир пробивает товар: " . $this->currentProduct->toString());
 
         return false;
     }

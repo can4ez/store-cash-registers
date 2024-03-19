@@ -74,24 +74,24 @@ class Customer implements IProcess
             $tickStep -= $timeLeft;
             $this->elapsedTime = $this->getTimeToPay();
 
-//            echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-//                . Utils::formatHours($time)
-//                . " | "
-//                . $this->name
-//                . " Оплатил покупки ["
-//                . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
-//                . "%] <br>";
+            \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
+                . Utils::formatHours($time)
+                . " | "
+                . $this->name
+                . " Оплатил покупки ["
+                . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+                . "%] ");
 
             return true;
         }
 
-//        echo "&nbsp;&nbsp;&nbsp;&nbsp;"
-//            . Utils::formatHours($time)
-//            . " | "
-//            . $this->name
-//            . " Оплачивает покупки ["
-//            . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
-//            . "%] <br>";
+        \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
+            . Utils::formatHours($time)
+            . " | "
+            . $this->name
+            . " Оплачивает покупки ["
+            . round($this->elapsedTime / $this->getTimeToPay() * 100, 2)
+            . "%] ");
 
         // Тратим время на частичную обработку этого товара
         $this->elapsedTime += $tickStep;
@@ -119,7 +119,7 @@ class Customer implements IProcess
                 $productsCount--;
             }
 
-//            echo "&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов) <br>";
+            \Shop\Utils::debug("&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов)");
 
             // Шагаем к первой самой свободной кассе
             $cashRegister = $this->findMostEmptyRegister();

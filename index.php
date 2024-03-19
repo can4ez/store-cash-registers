@@ -4,6 +4,8 @@ include __DIR__ . "/includes/Shop.php";
 
 use Shop\Shop;
 
+define('SHOW_DEBUG', false);
+
 $shop = new Shop('5ka');
 
 $shop->addProduct(new \Shop\WeightProduct('Помидоры', 250));
@@ -18,7 +20,7 @@ $customers = 1; // Количество новых посетителей
 $customerIndex = 0;
 
 for ($time = 60 * 8; ; $time += $tickStep) {
-//    echo "<br>--- start loop ---<br>";
+    \Shop\Utils::debug("--- start loop ---");
 
     for ($k = 0; $k < $customers; $k++) {
         $newCustomer = new \Shop\Customer('Покупатель #' . ++$customerIndex);
@@ -26,8 +28,6 @@ for ($time = 60 * 8; ; $time += $tickStep) {
     }
 
     $shop->process($time, $tickStep);
-
-//    echo "--- end loop ---<br>";
 
     $hour = round($time / 60);
     if ($hour > 8 && $hour < 12) {
@@ -40,12 +40,13 @@ for ($time = 60 * 8; ; $time += $tickStep) {
     // Ограничиваем количество покупателей в пик
     $customers = max(min($customers, $maxCustomers), 0);
 
-    if ($time >= $maxWorkTime) break;
-
     if ($time % 60 === 0) {
         $shop->showStatus($time);
     }
 
+    \Shop\Utils::debug("--- end loop ---");
+
+    if ($time >= $maxWorkTime) break;
 }
 
 echo "<hr>";

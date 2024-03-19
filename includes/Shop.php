@@ -116,7 +116,7 @@ class Shop implements IProcess
 
         $this->customers[] = $customer;
 
-//        echo "" . $customer->getName() . " пришел в магазин<br>";
+        \Shop\Utils::debug($customer->getName() . " пришел в магазин");
 
         return count($this->customers) - 1;
     }

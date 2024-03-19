@@ -13,4 +13,11 @@ class Utils
         $minutes = ($time % 60);
         return sprintf($format, $hours, $minutes);
     }
+
+    static public function debug($str)
+    {
+        if (!defined('SHOW_DEBUG') || SHOW_DEBUG !== true) return;
+
+        echo $str . "<br>";
+    }
 }
