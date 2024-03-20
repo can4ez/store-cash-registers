@@ -11,16 +11,22 @@ abstract class Product
      */
     const timeProcess = 1;
 
+    protected static int $index = 0;
+
+    protected int $id;
     protected string $name;
     protected float $price;
 
-    protected float $elapsedTime = 0;
+    protected float $elapsedTime;
 
     public function __construct(string $name, $price)
     {
+        $this->id = self::$index++;
         $this->name = $name;
         $this->price = $price;
+        $this->elapsedTime = 0;
     }
+
 
     /**
      * @return float
@@ -29,6 +35,9 @@ abstract class Product
 
     public abstract function getTimeToProcess(): float;
 
+    public abstract function clone(): self;
+
+    // TODO: НАДО ВЫНЕСТИ В Customer
     public function process(&$tickStep): bool
     {
         // Сколько осталось для заверщения обработки товара
@@ -55,5 +64,13 @@ abstract class Product
         }
 
         return "{$this->name} - {$this->getPrice()} руб.";
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

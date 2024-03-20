@@ -11,6 +11,11 @@ class WeightProduct extends Product
 
     public function getTimeToProcess(): float
     {
-        return self::timeProcess * 1.2;
+        return self::timeProcess;
+    }
+
+    public function clone(): Product
+    {
+        return new self($this->name, $this->price);
     }
 }

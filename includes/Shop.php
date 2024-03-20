@@ -3,6 +3,7 @@
 namespace Shop;
 
 include __DIR__ . '/utils/Utils.php';
+include __DIR__ . '/utils/AkimaSpline.php';
 
 include __DIR__ . '/interface/IProcess.php';
 include __DIR__ . '/interface/IProcessData.php';
@@ -15,7 +16,7 @@ include __DIR__ . '/customer/Customer.php';
 
 class Shop implements IProcess
 {
-    public const maxRegistersCount = 3;
+    public const maxRegistersCount = 40;
     public const maxCustomersOnRegister = 5;
 
     private static ?Shop $instance = null;

@@ -23,19 +23,14 @@ class Cashier implements IProcessData
         $this->register = $register;
     }
 
-    public function processProduct($time, &$timeLeft, $product = null): bool
+    public function processProduct($time, &$timeLeft): bool
     {
-        if ($this->currentProduct === null) {
-            $this->currentProduct = $product;
-        }
-
         if ($this->currentProduct->process($timeLeft) === true) {
             \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
                 . $this->name . " > "
                 . $this->currentCustomer->getName()
                 . " (" . $this->currentCustomer->getProductsCount() - 1 . ") |"
                 . " Кассир пробил товар: " . $this->currentProduct->toString());
-            $this->currentProduct = null;
             return true;
         }
 
@@ -62,17 +57,18 @@ class Cashier implements IProcessData
             $this->currentCustomer = $customer;
         }
 
-        $product = $this->currentProduct;
-
         while ($timeLeft > 0 && $this->currentCustomer->getProductsCount() > 0) {
-            if ($product === null) {
-                $product = $this->currentCustomer->getFirstProduct();
+            if ($this->currentProduct === null) {
+                $this->currentProduct = $this->currentCustomer->getFirstProduct();
             }
 
-            if ($this->processProduct($time, $timeLeft, $product)) {
-                $this->currentCustomer->shiftProduct();
+            if ($this->processProduct($time, $timeLeft)) {
+                $this->currentCustomer->removeProduct($this->currentProduct);
+                $this->currentProduct = null;
             }
         }
+
+        Utils::debug("CashierProcess: " . $this->currentCustomer->getName());
 
         if ($finish = ($this->currentCustomer->getProductsCount() === 0)) {
             if ($finish = $this->currentCustomer->pay($time, $timeLeft)) {

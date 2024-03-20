@@ -13,4 +13,9 @@ class PieceProduct extends Product
     {
         return self::timeProcess;
     }
+
+    public function clone(): Product
+    {
+        return new self($this->name, $this->price);
+    }
 }

@@ -34,7 +34,7 @@ class Customer implements IProcess
 
     public function addProduct(Product $product): void
     {
-        $this->products[] = $product;
+        $this->products[] = $product->clone();
     }
 
 
@@ -44,9 +44,14 @@ class Customer implements IProcess
         return $this->products[array_key_first($this->products)];
     }
 
-    public function shiftProduct()
+    public function removeProduct($product): bool
     {
-        return array_shift($this->products);
+        Utils::debug($this->getName() . " Remove product: " . $product->getId());
+        $this->products = array_filter($this->products, function ($item) use ($product) {
+            Utils::debug($this->getName() . " Check product: " . $item->getId());
+            return $item !== $product;
+        });
+        return true;
     }
 
     public function getProductsCount()
@@ -120,6 +125,10 @@ class Customer implements IProcess
             }
 
             \Shop\Utils::debug("&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов)");
+
+            foreach ($this->products as $product) {
+                \Shop\Utils::debug("&nbsp;&nbsp;" . $this->getName() . " " . $product->toString());
+            }
 
             // Шагаем к первой самой свободной кассе
             $cashRegister = $this->findMostEmptyRegister();
