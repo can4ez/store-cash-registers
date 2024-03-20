@@ -16,7 +16,7 @@ include __DIR__ . '/customer/Customer.php';
 
 class Shop implements IProcess
 {
-    public const maxRegistersCount = 40;
+    public const maxRegistersCount = 3;
     public const maxCustomersOnRegister = 5;
 
     private static ?Shop $instance = null;
