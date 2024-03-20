@@ -2,6 +2,8 @@
 
 namespace Shop;
 
+use Exception;
+
 /**
  * Покупатель
  */
@@ -79,7 +81,7 @@ class Customer implements IProcess
             $tickStep -= $timeLeft;
             $this->elapsedTime = $this->getTimeToPay();
 
-            \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
+            Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
                 . Utils::formatHours($time)
                 . " | "
                 . $this->name
@@ -90,7 +92,7 @@ class Customer implements IProcess
             return true;
         }
 
-        \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
+        Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;"
             . Utils::formatHours($time)
             . " | "
             . $this->name
@@ -118,16 +120,16 @@ class Customer implements IProcess
             while ($productsCount > 0) {
                 $product = Shop::getInstance()->getRandomProduct();
                 if ($product === false) {
-                    throw new \Exception("В магазине нет товаров!");
+                    throw new Exception("В магазине нет товаров!");
                 }
                 $this->addProduct($product);
                 $productsCount--;
             }
 
-            \Shop\Utils::debug("&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов)");
+            Utils::debug("&nbsp;" . $this->getName() . " взял " . $this->getProductsCount() . " товара(ов)");
 
             foreach ($this->products as $product) {
-                \Shop\Utils::debug("&nbsp;&nbsp;" . $this->getName() . " " . $product->toString());
+                Utils::debug("&nbsp;&nbsp;" . $this->getName() . " " . $product->toString());
             }
 
             // Шагаем к первой самой свободной кассе

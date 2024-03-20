@@ -75,7 +75,7 @@ class Shop implements IProcess
     {
         return array_filter($this->registers, function ($register, $key) {
             return $register->getState() === CashRegisterState::OPEN;
-        }, ARRAY_FILTER_USE_BOTH);;
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     public function tryOpenRegister(&$register): bool
@@ -117,7 +117,7 @@ class Shop implements IProcess
 
         $this->customers[] = $customer;
 
-        \Shop\Utils::debug($customer->getName() . " пришел в магазин");
+        Utils::debug($customer->getName() . " пришел в магазин");
 
         return count($this->customers) - 1;
     }

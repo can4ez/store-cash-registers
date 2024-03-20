@@ -26,7 +26,7 @@ class Cashier implements IProcessData
     public function processProduct($time, &$timeLeft): bool
     {
         if ($this->currentProduct->process($timeLeft) === true) {
-            \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
+            Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
                 . $this->name . " > "
                 . $this->currentCustomer->getName()
                 . " (" . $this->currentCustomer->getProductsCount() - 1 . ") |"
@@ -34,7 +34,7 @@ class Cashier implements IProcessData
             return true;
         }
 
-        \Shop\Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
+        Utils::debug("&nbsp;&nbsp;&nbsp;&nbsp;" . Utils::formatHours($time) . " | "
             . $this->name . " > "
             . $this->currentCustomer->getName()
             . " (" . $this->currentCustomer->getProductsCount() . ") |"
