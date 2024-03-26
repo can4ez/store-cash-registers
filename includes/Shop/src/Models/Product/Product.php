@@ -1,8 +1,6 @@
 <?php
 
-namespace Shop;
-include __DIR__ . "/PieceProduct.php";
-include __DIR__ . "/WeightProduct.php";
+namespace Shop\Models\Product;
 
 abstract class Product
 {

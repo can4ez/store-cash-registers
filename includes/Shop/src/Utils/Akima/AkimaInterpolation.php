@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop;
+namespace Shop\Utils\Akima;
 
 class AkimaInterpolation
 {
@@ -82,32 +82,5 @@ class AkimaInterpolation
 
         $mn = (2 * $delta[$n - 2]) - $m[$n - 3];
         return ((3 * $delta[$n - 2]) - (2 * $m[$n - 3]) + $mn) / 2;
-    }
-}
-
-// Класс реализующий сплайн Акимы
-class AkimaSpline
-{
-    private $x;
-    private $y;
-    private $akima;
-
-    public function __construct($x, $y)
-    {
-        $this->x = $x;
-        $this->y = $y;
-        $this->akima = new AkimaInterpolation($x, $y);
-    }
-
-    public function setPoints($x, $y)
-    {
-        $this->x = $x;
-        $this->y = $y;
-        $this->akima->setPoints($x, $y);
-    }
-
-    public function interpolate($xValue)
-    {
-        return $this->akima->interpolate($xValue);
     }
 }

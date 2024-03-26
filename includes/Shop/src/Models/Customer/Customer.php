@@ -1,8 +1,13 @@
 <?php
 
-namespace Shop;
+namespace Shop\Models\Customer;
 
 use Exception;
+use Shop\Interfaces\IProcess;
+use Shop\Models\CasheRegister\CashRegister;
+use Shop\Models\Product\Product;
+use Shop\Shop;
+use Shop\Utils\Utils;
 
 /**
  * Покупатель

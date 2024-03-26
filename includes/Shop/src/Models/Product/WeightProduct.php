@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop;
+namespace Shop\Models\Product;
 
 class WeightProduct extends Product
 {

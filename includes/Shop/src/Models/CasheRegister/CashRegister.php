@@ -1,12 +1,12 @@
 <?php
 
-namespace Shop;
+namespace Shop\Models\CasheRegister;
 
-enum CashRegisterState
-{
-    case CLOSE;
-    case OPEN;
-}
+use Shop\Interfaces\IProcess;
+use Shop\Models\Cashier\Cashier;
+use Shop\Models\Customer\Customer;
+use Shop\Shop;
+use Shop\Utils\Utils;
 
 class CashRegister implements IProcess
 {

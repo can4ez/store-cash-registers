@@ -2,19 +2,14 @@
 
 namespace Shop;
 
-include __DIR__ . '/utils/Utils.php';
-include __DIR__ . '/utils/AkimaSpline.php';
+use Shop\Models\CasheRegister\CashRegister;
+use Shop\Models\CasheRegister\CashRegisterState;
+use Shop\Models\Cashier\Cashier;
+use Shop\Models\Customer\Customer;
+use Shop\Models\Product\Product;
+use Shop\Utils\Utils;
 
-include __DIR__ . '/interface/IProcess.php';
-include __DIR__ . '/interface/IProcessData.php';
-
-include __DIR__ . '/cashier/Cashier.php';
-include __DIR__ . '/casheRegister/CashRegister.php';
-include __DIR__ . '/product/Product.php';
-include __DIR__ . '/customer/Customer.php';
-
-
-class Shop implements IProcess
+class Shop implements Interfaces\IProcess
 {
     public const maxRegistersCount = 3;
     public const maxCustomersOnRegister = 5;
@@ -37,7 +32,7 @@ class Shop implements IProcess
     private array $customers = [];
 
     /**
-     * @var Products[] Список продуктов в магазине
+     * @var Product[] Список продуктов в магазине
      */
     private array $products = [];
 

@@ -1,6 +1,11 @@
 <?php
+namespace Shop\Models\Cashier;
 
-namespace Shop;
+use Shop\Interfaces\IProcessData;
+use Shop\Models\CasheRegister\CashRegister;
+use Shop\Models\Customer\Customer;
+use Shop\Models\Product\Product;
+use Shop\Utils\Utils;
 
 class Cashier implements IProcessData
 {

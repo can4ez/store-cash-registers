@@ -1,22 +1,15 @@
 <?php
 
-include __DIR__ . "/includes/Shop.php";
-
-use Shop\AkimaSpline;
-use Shop\Customer;
-use Shop\PieceProduct;
-use Shop\Shop;
-use Shop\Utils;
-use Shop\WeightProduct;
+include __DIR__ . "/includes/Shop/autoload.php";
 
 set_time_limit(0);
 define('SHOW_DEBUG', false);
 
-$shop = new Shop('5ka');
+$shop = new \Shop\Shop('5ka');
 
-$shop->addProduct(new WeightProduct('Помидоры', 250));
-$shop->addProduct(new PieceProduct('Чипсы лейс с медом', 150));
-$shop->addProduct(new PieceProduct('Молоко 2% 1л', 53));
+$shop->addProduct(new \Shop\Models\Product\WeightProduct('Помидоры', 250));
+$shop->addProduct(new \Shop\Models\Product\PieceProduct('Чипсы лейс с медом', 150));
+$shop->addProduct(new \Shop\Models\Product\PieceProduct('Молоко 2% 1л', 53));
 
 $workStartTime = 60 * 8;
 $maxWorkTime = $workStartTime + 60 * 15; // Магазин будет открыт с 8 до 23 часов
@@ -30,7 +23,7 @@ $customerIndex = 0;
 // График распредения посетителей
 $x = [8, 10, 12, 14, 16, 18, 20, 21, 23];
 $y = [0, 2, 3, 15, 2, 2, 1, 2, 0];
-$curve = new AkimaSpline($x, $y);
+$curve = new \Shop\Utils\Akima\AkimaSpline($x, $y);
 
 for ($time = $workStartTime; ; $time += $tickStep) {
     $hour = round($time / 60);
@@ -45,10 +38,10 @@ for ($time = $workStartTime; ; $time += $tickStep) {
         $newCustomers = rand(-$maxCustomers, $maxCustomers);
     }
 
-    Utils::debug("--- start loop ---");
+    \Shop\Utils\Utils::debug("--- start loop ---");
 
     for ($k = 0; $k < $newCustomers; $k++) {
-        $newCustomer = new Customer('Покупатель #' . ++$customerIndex);
+        $newCustomer = new \Shop\Models\Customer\Customer('Покупатель #' . ++$customerIndex);
         $shop->addCustomer($newCustomer);
     }
 
@@ -58,13 +51,13 @@ for ($time = $workStartTime; ; $time += $tickStep) {
         $shop->showStatus($time);
     }
 
-    Utils::debug("--- end loop ---");
+    \Shop\Utils\Utils::debug("--- end loop ---");
 
     if ($time >= $maxWorkTime) break;
 }
 
 echo "<hr>";
-echo "Магазин закрылся, время: " . Utils::formatHours($time) . " ч. <br>";
+echo "Магазин закрылся, время: " . \Shop\Utils\Utils::formatHours($time) . " ч. <br>";
 echo "Всего было посетителей: " . $customerIndex . " <br>";
 echo "Осталось не обслуженных: " . $shop->getCustomersCount() . " <br>";
 
